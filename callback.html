@@ -21,7 +21,7 @@
         <p id="msg">Please wait</p>
     </div>
     <script>
-        const API='https://16.4.137.9.nip.io';
+        const API='https://1s0kvr4eke.execute-api.ap-south-1.amazonaws.com';
         (async()=>{
             const p=new URLSearchParams(location.search),code=p.get('code'),err=p.get('error');
             if(err||!code){document.getElementById('spinner').style.display='none';document.getElementById('status').textContent='Failed';document.getElementById('msg').innerHTML='<a href="index.html">Return</a>';return}
