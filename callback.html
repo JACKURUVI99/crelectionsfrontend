@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authenticating...</title>
+    <style>
+        body { font-family: "Helvetica Neue", sans-serif; background: #f8f8f8; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .box { text-align: center; }
+        .spinner { width: 40px; height: 40px; border: 2px solid #e0e0e0; border-top-color: #1a1a1a; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 24px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        h1 { font-size: 20px; font-weight: 400; margin-bottom: 8px; }
+        p { font-size: 14px; color: #666; }
+        a { display: inline-block; margin-top: 20px; padding: 12px 24px; background: #1a1a1a; color: #fff; text-decoration: none; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="spinner" id="spinner"></div>
+        <h1 id="status">Authenticating...</h1>
+        <p id="msg">Please wait</p>
+    </div>
+    <script>
+        const API='http://3.7.252.28:8080';
+        (async()=>{
+            const p=new URLSearchParams(location.search),code=p.get('code'),err=p.get('error');
+            if(err||!code){document.getElementById('spinner').style.display='none';document.getElementById('status').textContent='Failed';document.getElementById('msg').innerHTML='<a href="index.html">Return</a>';return}
+            try{
+                const r=await fetch(API+'/api/auth/dauth/callback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,state:p.get('state')})});
+                const d=await r.json();
+                if(!r.ok)throw new Error(d.error);
+                localStorage.setItem('token',d.token);
+                localStorage.setItem('voter',JSON.stringify(d.voter));
+                document.getElementById('status').textContent='Welcome, '+d.voter.name+'!';
+                document.getElementById('msg').textContent='Redirecting...';
+                setTimeout(()=>location.href='index.html',1500);
+            }catch(e){document.getElementById('spinner').style.display='none';document.getElementById('status').textContent='Failed';document.getElementById('msg').innerHTML=e.message+'<br><a href="index.html">Return</a>';}
+        })();
+    </script>
+</body>
+</html>
