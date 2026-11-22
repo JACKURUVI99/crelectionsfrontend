@@ -3,99 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EEE CR Elections 2026</title>
+    <title>EEE CR Elections</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: #f8f8f8; color: #1a1a1a; line-height: 1.6; }
-        a { color: inherit; text-decoration: none; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
-        header { padding: 30px 0; border-bottom: 1px solid #e0e0e0; }
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-        .nav-links { display: flex; gap: 40px; }
-        .nav-links a { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; transition: opacity 0.3s; }
-        .nav-links a:hover { opacity: 1; }
-        .login-btn { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 12px 24px; background: #1a1a1a; color: #fff; border: none; cursor: pointer; transition: background 0.3s; }
-        .login-btn:hover { background: #333; }
-        .hero { padding: 120px 0; text-align: center; }
-        .hero h1 { font-size: 72px; font-weight: 300; letter-spacing: -2px; margin-bottom: 20px; }
-        .hero p { font-size: 16px; opacity: 0.6; letter-spacing: 3px; text-transform: uppercase; }
-        .stats { display: flex; justify-content: center; gap: 80px; padding: 60px 0; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
-        .stat { text-align: center; }
-        .stat-number { font-size: 48px; font-weight: 300; }
-        .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5; margin-top: 8px; }
-        .section { padding: 80px 0; }
-        .section-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.5; margin-bottom: 40px; }
-        .candidates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; }
-        .candidate-card { background: #fff; padding: 40px; border: 1px solid #e0e0e0; transition: all 0.3s; cursor: pointer; }
-        .candidate-card:hover { border-color: #1a1a1a; }
-        .candidate-card.selected { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
-        .candidate-initial { width: 60px; height: 60px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 300; margin-bottom: 20px; }
-        .candidate-card.selected .candidate-initial { background: #333; }
-        .candidate-name { font-size: 20px; font-weight: 400; margin-bottom: 8px; }
-        .candidate-roll { font-size: 12px; letter-spacing: 1px; opacity: 0.5; margin-bottom: 16px; }
-        .candidate-manifesto { font-size: 14px; opacity: 0.7; line-height: 1.6; }
-        .vote-section { text-align: center; padding: 60px 0; }
-        .vote-btn { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; padding: 20px 60px; background: #1a1a1a; color: #fff; border: none; cursor: pointer; transition: all 0.3s; }
-        .vote-btn:hover { background: #333; }
-        .vote-btn:disabled { background: #ccc; cursor: not-allowed; }
-        .results-list { max-width: 600px; margin: 0 auto; }
-        .result-item { display: flex; align-items: center; padding: 20px 0; border-bottom: 1px solid #e0e0e0; }
-        .result-rank { font-size: 14px; font-weight: 600; width: 40px; }
-        .result-name { flex: 1; font-size: 16px; }
-        .result-bar { width: 150px; height: 4px; background: #e0e0e0; margin-right: 20px; }
-        .result-bar-fill { height: 100%; background: #1a1a1a; }
-        .result-percent { font-size: 14px; width: 50px; text-align: right; }
-        footer { padding: 40px 0; text-align: center; border-top: 1px solid #e0e0e0; margin-top: 80px; }
-        footer p { font-size: 12px; opacity: 0.5; }
-        footer a { text-decoration: underline; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
-        .modal.show { display: flex; }
-        .modal-content { background: #fff; padding: 60px; max-width: 400px; text-align: center; }
-        .modal h2 { font-size: 24px; font-weight: 400; margin-bottom: 20px; }
-        .modal p { opacity: 0.6; margin-bottom: 30px; }
-        .modal-btns { display: flex; gap: 20px; justify-content: center; }
-        .modal-btns button { padding: 15px 30px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid #1a1a1a; cursor: pointer; }
-        .modal-btns .cancel { background: #fff; color: #1a1a1a; }
-        .modal-btns .confirm { background: #1a1a1a; color: #fff; }
-        .message { padding: 60px; text-align: center; }
-        .message h2 { font-size: 32px; font-weight: 300; margin-bottom: 16px; }
-        .message p { opacity: 0.6; }
-        @media (max-width: 768px) { .container { padding: 0 20px; } .nav-links { display: none; } .hero h1 { font-size: 42px; } .stats { flex-direction: column; gap: 30px; } }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,sans-serif;background:#fff;color:#000;padding:40px 20px;max-width:600px;margin:0 auto}
+        h1{font-size:24px;font-weight:500;margin-bottom:8px}
+        p{color:#666;font-size:14px;margin-bottom:40px}
+        .btn{background:#000;color:#fff;border:none;padding:10px 20px;font-size:13px;cursor:pointer;margin-bottom:40px}
+        .btn:hover{background:#333}
+        h2{font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px}
+        .card{border:1px solid #eee;padding:20px;margin-bottom:12px;cursor:pointer}
+        .card:hover{border-color:#000}
+        .card.selected{background:#000;color:#fff}
+        .card h3{font-size:16px;font-weight:500}
+        .card span{font-size:12px;color:#999}
+        .card.selected span{color:#ccc}
+        .result{display:flex;align-items:center;padding:12px 0;border-bottom:1px solid #eee}
+        .result span:first-child{width:30px;font-weight:500}
+        .result span:nth-child(2){flex:1}
+        .result span:last-child{color:#666}
+        footer{margin-top:60px;font-size:12px;color:#999}
+        footer a{color:#000}
+        .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center}
+        .modal.show{display:flex}
+        .modal>div{background:#fff;padding:40px;text-align:center;max-width:300px}
+        .modal h3{margin-bottom:20px}
+        .modal button{margin:10px}
     </style>
 </head>
 <body>
-    <header><div class="container"><nav>
-        <div class="logo">EEE Elections</div>
-        <div class="nav-links"><a href="#candidates">Candidates</a><a href="#vote">Vote</a><a href="#results">Results</a></div>
-        <button class="login-btn" id="loginBtn" onclick="loginWithDAuth()">Login</button>
-    </nav></div></header>
-    <main>
-        <section class="hero"><div class="container"><h1>Class Representative</h1><p>EEE-A Batch'28 · NIT Trichy · 2026</p></div></section>
-        <section class="stats">
-            <div class="stat"><div class="stat-number" id="statCandidates">—</div><div class="stat-label">Candidates</div></div>
-            <div class="stat"><div class="stat-number" id="statVoters">—</div><div class="stat-label">Voters</div></div>
-            <div class="stat"><div class="stat-number" id="statVoted">—</div><div class="stat-label">Voted</div></div>
-        </section>
-        <section id="candidates" class="section"><div class="container"><div class="section-title">Candidates</div><div class="candidates-grid" id="candidatesGrid"></div></div></section>
-        <section id="vote" class="vote-section"><div class="container"><button class="vote-btn" id="voteBtn" onclick="submitVote()" disabled>Select a candidate</button></div></section>
-        <section id="results" class="section"><div class="container"><div class="section-title">Results</div><div class="results-list" id="resultsList"><div class="message"><h2>Pending</h2><p>Results after voting ends</p></div></div></div></section>
-    </main>
-    <footer><p>Made with ❤️ by <a href="https://github.com/JACKURUVI99" target="_blank">Harish Annavisamy</a></p></footer>
-    <div class="modal" id="confirmModal"><div class="modal-content"><h2>Confirm Vote</h2><p id="confirmText">Vote for this candidate?</p><div class="modal-btns"><button class="cancel" onclick="closeModal()">Cancel</button><button class="confirm" onclick="confirmVote()">Confirm</button></div></div></div>
+    <h1>CR Elections</h1>
+    <p>EEE-A Batch'28</p>
+    <button class="btn" id="loginBtn" onclick="login()">Login</button>
+
+    <h2>Candidates</h2>
+    <div id="candidates"></div>
+
+    <button class="btn" id="voteBtn" style="display:none" onclick="vote()">Vote</button>
+
+    <h2 style="margin-top:40px">Results</h2>
+    <div id="results"><p style="color:#999">Pending</p></div>
+
+    <footer>Made with ❤️ by <a href="https://github.com/JACKURUVI99">Harish Annavisamy</a></footer>
+
+    <div class="modal" id="modal">
+        <div>
+            <h3 id="modalText">Confirm?</h3>
+            <button class="btn" onclick="closeModal()">Cancel</button>
+            <button class="btn" onclick="confirmVote()">Confirm</button>
+        </div>
+    </div>
+
     <script>
-        const API='http://3.7.252.28:8080',DAUTH={clientId:'sXdN9pQbJXm3JDN-',redirect:'https://jackuruvi99.github.io/crelectionsfrontend/callback.html',auth:'https://auth.delta.nitt.edu/authorize'};
-        let user=null,candidates=[],selected=null;
-        document.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('voter');if(s){user=JSON.parse(s);document.getElementById('loginBtn').textContent=user.name.split(' ')[0]}loadCandidates();loadResults()});
-        function loginWithDAuth(){if(user){localStorage.removeItem('token');localStorage.removeItem('voter');location.reload();return}location.href=DAUTH.auth+'?'+new URLSearchParams({client_id:DAUTH.clientId,redirect_uri:DAUTH.redirect,response_type:'code',scope:'email openid profile user',grant_type:'authorization_code',state:Math.random().toString(36).slice(2)})}
-        function isEligible(r){return r&&r.startsWith('107124')&&parseInt(r.slice(-1))%2!==0}
-        async function loadCandidates(){try{const r=await fetch(API+'/api/candidates');candidates=await r.json()||[];document.getElementById('statCandidates').textContent=candidates.length;renderCandidates()}catch(e){}}
-        function renderCandidates(){const g=document.getElementById('candidatesGrid');if(!candidates.length){g.innerHTML='<div class="message"><p>No candidates</p></div>';return}g.innerHTML=candidates.map(c=>`<div class="candidate-card" data-id="${c.id}" onclick="selectCandidate(${c.id})"><div class="candidate-initial">${c.name.charAt(0)}</div><div class="candidate-name">${c.name}</div><div class="candidate-roll">${c.roll_number}</div><div class="candidate-manifesto">${c.manifesto||'No manifesto'}</div></div>`).join('')}
-        function selectCandidate(id){if(!user){loginWithDAuth();return}if(!isEligible(user.roll_number)){alert("Only the Student From EEE-A Batch'28 are allowed to vote");return}if(user.has_voted){alert('Already voted');return}selected=candidates.find(c=>c.id===id);document.querySelectorAll('.candidate-card').forEach(e=>e.classList.remove('selected'));document.querySelector(`[data-id="${id}"]`).classList.add('selected');document.getElementById('voteBtn').disabled=false;document.getElementById('voteBtn').textContent='Vote for '+selected.name}
-        function submitVote(){if(!selected)return;document.getElementById('confirmText').textContent='Vote for '+selected.name+'?';document.getElementById('confirmModal').classList.add('show')}
-        function closeModal(){document.getElementById('confirmModal').classList.remove('show')}
-        async function confirmVote(){closeModal();try{const r=await fetch(API+'/api/vote',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+localStorage.getItem('token')},body:JSON.stringify({candidate_id:selected.id})});if(r.ok){user.has_voted=true;localStorage.setItem('voter',JSON.stringify(user));alert('Vote submitted!');location.reload()}else{alert((await r.json()).error||'Failed')}}catch(e){alert('Error')}}
-        async function loadResults(){try{const r=await fetch(API+'/api/results');const d=await r.json();if(d.stats){document.getElementById('statVoters').textContent=d.stats.total_voters;document.getElementById('statVoted').textContent=d.stats.total_voted}if(d.candidates&&d.candidates.length){const t=d.candidates.reduce((s,c)=>s+c.vote_count,0);document.getElementById('resultsList').innerHTML=d.candidates.map((c,i)=>{const p=t?(c.vote_count/t*100).toFixed(1):0;return`<div class="result-item"><div class="result-rank">${i+1}</div><div class="result-name">${c.name}</div><div class="result-bar"><div class="result-bar-fill" style="width:${p}%"></div></div><div class="result-percent">${p}%</div></div>`}).join('')}}catch(e){}}
+        const API='http://3.7.252.28:8080';
+        let user=JSON.parse(localStorage.getItem('voter')),selected=null,candidates=[];
+        if(user)document.getElementById('loginBtn').textContent=user.name.split(' ')[0];
+
+        function login(){
+            if(user){localStorage.clear();location.reload();return}
+            location.href='https://auth.delta.nitt.edu/authorize?'+new URLSearchParams({client_id:'sXdN9pQbJXm3JDN-',redirect_uri:'https://jackuruvi99.github.io/crelectionsfrontend/callback.html',response_type:'code',scope:'email openid profile user',grant_type:'authorization_code',state:Math.random().toString(36).slice(2)});
+        }
+
+        fetch(API+'/api/candidates').then(r=>r.json()).then(d=>{
+            candidates=d||[];
+            document.getElementById('candidates').innerHTML=candidates.length?candidates.map(c=>`<div class="card" data-id="${c.id}" onclick="select(${c.id})"><h3>${c.name}</h3><span>${c.roll_number}</span></div>`).join(''):'<p style="color:#999">None</p>';
+        });
+
+        fetch(API+'/api/results').then(r=>r.json()).then(d=>{
+            if(d.candidates?.length){
+                const t=d.candidates.reduce((s,c)=>s+c.vote_count,0);
+                document.getElementById('results').innerHTML=d.candidates.map((c,i)=>`<div class="result"><span>${i+1}</span><span>${c.name}</span><span>${t?(c.vote_count/t*100).toFixed(0):0}%</span></div>`).join('');
+            }
+        }).catch(()=>{});
+
+        function select(id){
+            if(!user){login();return}
+            if(!user.roll_number?.startsWith('107124')||parseInt(user.roll_number.slice(-1))%2===0){alert("Only EEE-A Batch'28 allowed");return}
+            if(user.has_voted){alert('Already voted');return}
+            selected=candidates.find(c=>c.id===id);
+            document.querySelectorAll('.card').forEach(e=>e.classList.remove('selected'));
+            document.querySelector(`[data-id="${id}"]`).classList.add('selected');
+            document.getElementById('voteBtn').style.display='block';
+        }
+
+        function vote(){document.getElementById('modalText').textContent='Vote for '+selected.name+'?';document.getElementById('modal').classList.add('show')}
+        function closeModal(){document.getElementById('modal').classList.remove('show')}
+        async function confirmVote(){
+            closeModal();
+            const r=await fetch(API+'/api/vote',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+localStorage.getItem('token')},body:JSON.stringify({candidate_id:selected.id})});
+            if(r.ok){user.has_voted=true;localStorage.setItem('voter',JSON.stringify(user));alert('Done!');location.reload()}else alert((await r.json()).error||'Failed');
+        }
     </script>
 </body>
 </html>
