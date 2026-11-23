@@ -9,12 +9,26 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             background: #000; color: #f5f5f7;
-            min-height: 100vh; padding: 20px;
+            min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
-        .page { max-width: 600px; margin: 0 auto; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .page { max-width: 600px; margin: 0 auto; padding: 20px; }
+
+        .login-screen {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 40px 20px;
+        }
+        .login-screen h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .login-screen p { color: #86868b; margin-bottom: 32px; }
+
+        .app { display: none; }
+        .app.show { display: block; }
+
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         h1 { font-size: 24px; font-weight: 600; }
+
         .btn {
             background: #0a84ff; color: #fff; border: none;
             padding: 10px 20px; border-radius: 10px;
@@ -42,21 +56,29 @@
             color: #f5f5f7; font-size: 15px;
         }
         input:focus, textarea:focus { outline: 1px solid #0a84ff; }
-        textarea { resize: vertical; min-height: 80px; }
+        textarea { resize: vertical; min-height: 60px; }
+
+        .form-row { display: flex; gap: 12px; }
+        .form-row .form-group { flex: 1; }
 
         .list { display: flex; flex-direction: column; gap: 8px; }
         .item {
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex; align-items: center; gap: 12px;
             padding: 12px; background: #2c2c2e; border-radius: 10px;
+        }
+        .item-photo {
+            width: 40px; height: 40px; border-radius: 8px;
+            background: linear-gradient(135deg, #5e5ce6, #bf5af2);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: 600; font-size: 16px;
+            object-fit: cover;
         }
         .item-info { flex: 1; }
         .item-name { font-size: 15px; font-weight: 500; }
         .item-sub { font-size: 12px; color: #86868b; }
         .item-actions { display: flex; gap: 8px; }
 
-        .toggle {
-            display: flex; gap: 8px; margin-top: 12px;
-        }
+        .toggle { display: flex; gap: 8px; }
         .toggle button {
             flex: 1; padding: 12px;
             background: #2c2c2e; border: none; border-radius: 10px;
@@ -64,82 +86,188 @@
         }
         .toggle button.active { background: #0a84ff; }
 
-        .status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+        .status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
         .status.approved { background: #30d158; color: #000; }
         .status.pending { background: #ff9f0a; color: #000; }
 
         .empty { text-align: center; padding: 24px; color: #86868b; }
+
+        .vote-info { font-size: 11px; color: #0a84ff; }
+
+        .tabs { display: flex; gap: 4px; margin-bottom: 20px; }
+        .tab {
+            flex: 1; padding: 12px; text-align: center;
+            background: #1c1c1e; border: none; border-radius: 10px;
+            color: #86868b; font-size: 14px; font-weight: 500; cursor: pointer;
+        }
+        .tab.active { background: #0a84ff; color: #fff; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
-    <div class="page">
-        <header>
-            <h1>Admin Panel</h1>
-            <a href="index.html" class="btn btn-sm">Back</a>
-        </header>
+    <div class="login-screen" id="loginScreen">
+        <h1>Admin Panel</h1>
+        <p>Sign in with your NIT Trichy account</p>
+        <button class="btn" onclick="login()">Sign In</button>
+    </div>
 
-        <div class="section">
-            <div class="section-title">Add Candidate</div>
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" id="candName" placeholder="Full name">
-            </div>
-            <div class="form-group">
-                <label>Roll Number</label>
-                <input type="text" id="candRoll" placeholder="e.g. 107124001">
-            </div>
-            <div class="form-group">
-                <label>Manifesto (optional)</label>
-                <textarea id="candManifesto" placeholder="Campaign promises..."></textarea>
-            </div>
-            <button class="btn" onclick="addCandidate()">Add Candidate</button>
-        </div>
+    <div class="app" id="app">
+        <div class="page">
+            <header>
+                <h1>Admin Panel</h1>
+                <div>
+                    <a href="index.html" class="btn btn-sm" style="margin-right:8px">View Site</a>
+                    <button class="btn btn-sm btn-red" onclick="logout()">Sign Out</button>
+                </div>
+            </header>
 
-        <div class="section">
-            <div class="section-title">Candidates</div>
-            <div class="list" id="candidatesList"></div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Election Settings</div>
-            <div class="toggle">
-                <button id="resultsOff" onclick="setResults(false)">Results Hidden</button>
-                <button id="resultsOn" onclick="setResults(true)">Results Public</button>
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('candidates')">Candidates</button>
+                <button class="tab" onclick="showTab('voters')">Voters</button>
+                <button class="tab" onclick="showTab('settings')">Settings</button>
             </div>
-        </div>
 
-        <div class="section">
-            <div class="section-title">Voters</div>
-            <div class="list" id="votersList"></div>
+            <div id="candidates" class="tab-content active">
+                <div class="section">
+                    <div class="section-title">Add Candidate</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="candName" placeholder="Full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Roll Number</label>
+                            <input type="text" id="candRoll" placeholder="107124xxx">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Photo URL (optional)</label>
+                        <input type="text" id="candPhoto" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Manifesto (optional)</label>
+                        <textarea id="candManifesto" placeholder="Campaign promises..."></textarea>
+                    </div>
+                    <button class="btn" onclick="addCandidate()">Add Candidate</button>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">All Candidates</div>
+                    <div class="list" id="candidatesList"></div>
+                </div>
+            </div>
+
+            <div id="voters" class="tab-content">
+                <div class="section">
+                    <div class="section-title">All Voters</div>
+                    <div class="list" id="votersList"></div>
+                </div>
+            </div>
+
+            <div id="settings" class="tab-content">
+                <div class="section">
+                    <div class="section-title">Voting Status</div>
+                    <div class="toggle">
+                        <button id="votingOff" onclick="setVoting(false)">Voting Closed</button>
+                        <button id="votingOn" onclick="setVoting(true)">Voting Open</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Results Visibility</div>
+                    <div class="toggle">
+                        <button id="resultsOff" onclick="setResults(false)">Hidden</button>
+                        <button id="resultsOn" onclick="setResults(true)">Public</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Admins</div>
+                    <div class="form-group">
+                        <label>Add Admin (Roll Number)</label>
+                        <div style="display:flex;gap:8px">
+                            <input type="text" id="newAdmin" placeholder="107124xxx" style="flex:1">
+                            <button class="btn" onclick="addAdmin()">Add</button>
+                        </div>
+                    </div>
+                    <div class="list" id="adminsList" style="margin-top:16px"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         const API = 'https://1s0kvr4eke.execute-api.ap-south-1.amazonaws.com';
+        let user = JSON.parse(localStorage.getItem('voter'));
+        let admins = ['107124039'];
 
-        loadCandidates();
-        loadVoters();
+        checkAuth();
+
+        async function checkAuth() {
+            if (!user) return;
+            
+            // Check if user is admin
+            const r = await fetch(API + '/api/admin/check?roll=' + user.roll_number);
+            const d = await r.json();
+            
+            if (d.is_admin) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('app').classList.add('show');
+                loadAll();
+            } else {
+                alert('Access denied. You are not an admin.');
+                localStorage.clear();
+                location.href = 'index.html';
+            }
+        }
+
+        function login() {
+            location.href = 'https://auth.delta.nitt.edu/authorize?' + new URLSearchParams({
+                client_id: 'sXdN9pQbJXm3JDN-',
+                redirect_uri: 'https://jackuruvi99.github.io/crelectionsfrontend/callback.html?admin=1',
+                response_type: 'code', scope: 'email openid profile user',
+                grant_type: 'authorization_code', state: 'admin_' + Math.random().toString(36).slice(2)
+            });
+        }
+
+        function logout() { localStorage.clear(); location.reload(); }
+
+        function showTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[onclick="showTab('${name}')"]`).classList.add('active');
+            document.getElementById(name).classList.add('active');
+        }
+
+        function loadAll() {
+            loadCandidates();
+            loadVoters();
+            loadAdmins();
+            loadSettings();
+        }
 
         async function addCandidate() {
             const name = document.getElementById('candName').value.trim();
             const roll = document.getElementById('candRoll').value.trim();
+            const photo = document.getElementById('candPhoto').value.trim();
             const manifesto = document.getElementById('candManifesto').value.trim();
             if (!name || !roll) { alert('Name and roll required'); return; }
             
             const r = await fetch(API + '/api/admin/candidates', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, roll_number: roll, manifesto })
+                body: JSON.stringify({ name, roll_number: roll, photo, manifesto })
             });
             if (r.ok) {
                 document.getElementById('candName').value = '';
                 document.getElementById('candRoll').value = '';
+                document.getElementById('candPhoto').value = '';
                 document.getElementById('candManifesto').value = '';
                 loadCandidates();
                 alert('Candidate added!');
-            } else {
-                alert((await r.json()).error || 'Failed');
-            }
+            } else { alert('Failed'); }
         }
 
         async function loadCandidates() {
@@ -149,11 +277,12 @@
             if (!d?.length) { list.innerHTML = '<p class="empty">No candidates</p>'; return; }
             list.innerHTML = d.map(c => `
                 <div class="item">
+                    ${c.photo ? `<img src="${c.photo}" class="item-photo">` : `<div class="item-photo">${c.name.charAt(0)}</div>`}
                     <div class="item-info">
                         <div class="item-name">${c.name}</div>
-                        <div class="item-sub">${c.roll_number}</div>
+                        <div class="item-sub">${c.roll_number} • ${c.vote_count} votes</div>
                     </div>
-                    <span class="status ${c.is_approved ? 'approved' : 'pending'}">${c.is_approved ? 'Approved' : 'Pending'}</span>
+                    <span class="status ${c.is_approved ? 'approved' : 'pending'}">${c.is_approved ? 'Live' : 'Draft'}</span>
                     <div class="item-actions">
                         ${!c.is_approved ? `<button class="btn btn-sm btn-green" onclick="approveCandidate(${c.id})">Approve</button>` : ''}
                         <button class="btn btn-sm btn-red" onclick="deleteCandidate(${c.id})">Delete</button>
@@ -168,33 +297,84 @@
         }
 
         async function deleteCandidate(id) {
-            if (!confirm('Delete this candidate?')) return;
+            if (!confirm('Delete?')) return;
             await fetch(API + `/api/admin/candidates/${id}`, { method: 'DELETE' });
             loadCandidates();
         }
 
         async function loadVoters() {
-            const r = await fetch(API + '/api/voters');
+            const r = await fetch(API + '/api/admin/voters');
             const d = await r.json();
             const list = document.getElementById('votersList');
             if (!d?.length) { list.innerHTML = '<p class="empty">No voters</p>'; return; }
             list.innerHTML = d.map(v => `
                 <div class="item">
-                    <div class="item-info"><div class="item-name">${v.name || 'Unknown'}</div></div>
+                    <div class="item-info">
+                        <div class="item-name">${v.name || 'Unknown'}</div>
+                        <div class="item-sub">${v.roll_number}</div>
+                    </div>
                     <span class="status ${v.has_voted ? 'approved' : 'pending'}">${v.has_voted ? 'Voted' : 'Pending'}</span>
+                    ${v.voted_for ? `<span class="vote-info">→ ${v.voted_for}</span>` : ''}
                 </div>
             `).join('');
         }
 
-        async function setResults(released) {
-            await fetch(API + '/api/admin/results', {
+        async function loadAdmins() {
+            const r = await fetch(API + '/api/admin/admins');
+            const d = await r.json();
+            const list = document.getElementById('adminsList');
+            if (!d?.length) { list.innerHTML = '<p class="empty">No admins</p>'; return; }
+            list.innerHTML = d.map(a => `
+                <div class="item">
+                    <div class="item-info"><div class="item-name">${a.roll_number}</div></div>
+                    ${a.roll_number !== '107124039' ? `<button class="btn btn-sm btn-red" onclick="removeAdmin('${a.roll_number}')">Remove</button>` : '<span class="status approved">Owner</span>'}
+                </div>
+            `).join('');
+        }
+
+        async function addAdmin() {
+            const roll = document.getElementById('newAdmin').value.trim();
+            if (!roll) return;
+            await fetch(API + '/api/admin/admins', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ released })
+                body: JSON.stringify({ roll_number: roll })
             });
-            document.getElementById('resultsOff').classList.toggle('active', !released);
-            document.getElementById('resultsOn').classList.toggle('active', released);
-            alert(released ? 'Results are now public' : 'Results hidden');
+            document.getElementById('newAdmin').value = '';
+            loadAdmins();
+        }
+
+        async function removeAdmin(roll) {
+            if (!confirm('Remove admin?')) return;
+            await fetch(API + '/api/admin/admins/' + roll, { method: 'DELETE' });
+            loadAdmins();
+        }
+
+        async function loadSettings() {
+            const r = await fetch(API + '/api/admin/settings');
+            const d = await r.json();
+            document.getElementById('votingOff').classList.toggle('active', !d.voting_open);
+            document.getElementById('votingOn').classList.toggle('active', d.voting_open);
+            document.getElementById('resultsOff').classList.toggle('active', !d.results_released);
+            document.getElementById('resultsOn').classList.toggle('active', d.results_released);
+        }
+
+        async function setVoting(open) {
+            await fetch(API + '/api/admin/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ voting_open: open })
+            });
+            loadSettings();
+        }
+
+        async function setResults(released) {
+            await fetch(API + '/api/admin/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ results_released: released })
+            });
+            loadSettings();
         }
     </script>
 </body>

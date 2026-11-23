@@ -3,39 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authenticating...</title>
+    <title>Signing in...</title>
     <style>
-        body { font-family: "Helvetica Neue", sans-serif; background: #f8f8f8; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
-        .box { text-align: center; }
-        .spinner { width: 40px; height: 40px; border: 2px solid #e0e0e0; border-top-color: #1a1a1a; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 24px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #000; color: #f5f5f7;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .container { text-align: center; padding: 40px; }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 3px solid #2c2c2e; border-top-color: #0a84ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
-        h1 { font-size: 20px; font-weight: 400; margin-bottom: 8px; }
-        p { font-size: 14px; color: #666; }
-        a { display: inline-block; margin-top: 20px; padding: 12px 24px; background: #1a1a1a; color: #fff; text-decoration: none; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+        h1 { font-size: 20px; margin-bottom: 8px; }
+        p { font-size: 14px; color: #86868b; }
+        .error { color: #ff453a; }
+        .btn {
+            display: inline-block; margin-top: 20px;
+            padding: 12px 24px; background: #0a84ff; color: #fff;
+            text-decoration: none; border-radius: 10px;
+            font-size: 14px; font-weight: 500;
+        }
     </style>
 </head>
 <body>
-    <div class="box">
+    <div class="container">
         <div class="spinner" id="spinner"></div>
-        <h1 id="status">Authenticating...</h1>
-        <p id="msg">Please wait</p>
+        <h1 id="status">Signing in...</h1>
+        <p id="message">Please wait</p>
     </div>
     <script>
-        const API='https://1s0kvr4eke.execute-api.ap-south-1.amazonaws.com';
-        (async()=>{
-            const p=new URLSearchParams(location.search),code=p.get('code'),err=p.get('error');
-            if(err||!code){document.getElementById('spinner').style.display='none';document.getElementById('status').textContent='Failed';document.getElementById('msg').innerHTML='<a href="index.html">Return</a>';return}
-            try{
-                const r=await fetch(API+'/api/auth/dauth/callback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,state:p.get('state')})});
-                const d=await r.json();
-                if(!r.ok)throw new Error(d.error);
-                localStorage.setItem('token',d.token);
-                localStorage.setItem('voter',JSON.stringify(d.voter));
-                document.getElementById('status').textContent='Welcome, '+d.voter.name+'!';
-                document.getElementById('msg').textContent='Redirecting...';
-                setTimeout(()=>location.href='index.html',1500);
-            }catch(e){document.getElementById('spinner').style.display='none';document.getElementById('status').textContent='Failed';document.getElementById('msg').innerHTML=e.message+'<br><a href="index.html">Return</a>';}
-        })();
+        const API = 'https://1s0kvr4eke.execute-api.ap-south-1.amazonaws.com';
+        
+        async function handleCallback() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            const state = params.get('state');
+            const error = params.get('error');
+            const isAdmin = params.get('admin') === '1' || state?.startsWith('admin_');
+
+            if (error || !code) {
+                document.getElementById('spinner').style.display = 'none';
+                document.getElementById('status').textContent = 'Failed';
+                document.getElementById('message').innerHTML = `<span class="error">${error || 'No code'}</span><br><a href="index.html" class="btn">Return</a>`;
+                return;
+            }
+
+            try {
+                const r = await fetch(API + '/api/auth/dauth/callback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, state })
+                });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.error || 'Failed');
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('voter', JSON.stringify(data.voter));
+
+                document.getElementById('status').textContent = 'Welcome, ' + data.voter.name + '!';
+                document.getElementById('message').textContent = 'Redirecting...';
+
+                setTimeout(() => {
+                    window.location.href = isAdmin ? 'admin.html' : 'index.html';
+                }, 1000);
+            } catch (err) {
+                document.getElementById('spinner').style.display = 'none';
+                document.getElementById('status').textContent = 'Failed';
+                document.getElementById('message').innerHTML = `<span class="error">${err.message}</span><br><a href="index.html" class="btn">Return</a>`;
+            }
+        }
+        handleCallback();
     </script>
 </body>
 </html>
