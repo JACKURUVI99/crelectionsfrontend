@@ -46,9 +46,10 @@
             const code = params.get('code');
             const state = params.get('state');
             const error = params.get('error');
-            const next = params.get('next');
             
-            const isAdmin = next === 'admin' || state?.startsWith('admin_');
+            // Check where to redirect after login
+            const redirectTo = localStorage.getItem('redirectTo');
+            localStorage.removeItem('redirectTo');
 
             if (error || !code) {
                 document.getElementById('spinner').style.display = 'none';
@@ -73,11 +74,7 @@
                 document.getElementById('message').textContent = 'Redirecting...';
 
                 setTimeout(() => {
-                    if (isAdmin) {
-                        window.location.href = 'admin.html?auth=success';
-                    } else {
-                        window.location.href = 'index.html';
-                    }
+                    window.location.href = redirectTo === 'admin' ? 'admin.html' : 'index.html';
                 }, 1000);
             } catch (err) {
                 document.getElementById('spinner').style.display = 'none';

@@ -92,7 +92,6 @@
         .status.pending { background: #ff9f0a; color: #000; }
 
         .empty { text-align: center; padding: 24px; color: #86868b; }
-
         .vote-info { font-size: 11px; color: #0a84ff; margin-left: 8px; }
 
         .tabs { display: flex; gap: 4px; margin-bottom: 20px; }
@@ -102,7 +101,6 @@
             color: #86868b; font-size: 14px; font-weight: 500; cursor: pointer;
         }
         .tab.active { background: #0a84ff; color: #fff; }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; }
     </style>
@@ -202,21 +200,11 @@
 
     <script>
         const API = 'https://1s0kvr4eke.execute-api.ap-south-1.amazonaws.com';
-        let user = null;
+        let user = JSON.parse(localStorage.getItem('voter'));
 
-        // Check URL for returning from DAuth
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('auth') === 'success') {
-            user = JSON.parse(localStorage.getItem('voter'));
-            if (user) {
-                checkAdmin();
-            }
-        } else {
-            // Check if already logged in as admin
-            user = JSON.parse(localStorage.getItem('voter'));
-            if (user) {
-                checkAdmin();
-            }
+        // Check if user is logged in and is admin
+        if (user) {
+            checkAdmin();
         }
 
         async function checkAdmin() {
@@ -242,26 +230,20 @@
         }
 
         function login() {
-            // Clear any existing session for fresh admin login
-            localStorage.removeItem('adminToken');
-            
-            const state = 'admin_' + Math.random().toString(36).slice(2);
-            localStorage.setItem('adminState', state);
+            // Store that we want to come back to admin
+            localStorage.setItem('redirectTo', 'admin');
             
             location.href = 'https://auth.delta.nitt.edu/authorize?' + new URLSearchParams({
                 client_id: 'sXdN9pQbJXm3JDN-',
-                redirect_uri: 'https://jackuruvi99.github.io/crelectionsfrontend/callback.html?next=admin',
+                redirect_uri: 'https://jackuruvi99.github.io/crelectionsfrontend/callback.html',
                 response_type: 'code', 
                 scope: 'email openid profile user',
                 grant_type: 'authorization_code', 
-                state: state
+                state: Math.random().toString(36).slice(2)
             });
         }
 
-        function logout() { 
-            localStorage.clear(); 
-            location.reload(); 
-        }
+        function logout() { localStorage.clear(); location.reload(); }
 
         function showTab(name) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
