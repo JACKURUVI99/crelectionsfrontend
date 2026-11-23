@@ -8,448 +8,293 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(180deg, #f5f5f7 0%, #ffffff 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            background: #f5f5f7;
             color: #1d1d1f;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 0 22px;
-        }
+        .page { max-width: 500px; margin: 0 auto; padding: 20px; }
 
-        /* Navigation */
-        nav {
-            position: sticky;
-            top: 0;
-            background: rgba(251, 251, 253, 0.8);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-
-        nav .container {
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 52px;
+            padding: 16px 0;
+            margin-bottom: 32px;
         }
 
-        .logo {
-            font-size: 21px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
+        .logo { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
 
-        .nav-links {
-            display: flex;
-            gap: 32px;
-        }
-
-        .nav-links a {
-            font-size: 14px;
-            color: #1d1d1f;
-            text-decoration: none;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-
-        .nav-links a:hover { opacity: 1; }
-
-        .login-btn {
-            background: #0071e3;
-            color: white;
+        .btn {
+            background: #007aff;
+            color: #fff;
             border: none;
-            padding: 8px 16px;
-            border-radius: 980px;
+            padding: 10px 20px;
+            border-radius: 20px;
             font-size: 14px;
-            font-weight: 400;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background 0.2s;
         }
 
-        .login-btn:hover {
-            background: #0077ed;
-        }
+        .btn:hover { background: #0066d6; }
 
-        /* Hero */
         .hero {
             text-align: center;
-            padding: 80px 0 60px;
-        }
-
-        .hero-eyebrow {
-            font-size: 17px;
-            font-weight: 400;
-            color: #6e6e73;
-            margin-bottom: 8px;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 600;
-            letter-spacing: -0.015em;
-            line-height: 1.07;
-            background: linear-gradient(90deg, #1d1d1f 0%, #6e6e73 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-sub {
-            font-size: 21px;
-            font-weight: 400;
-            color: #6e6e73;
-            margin-top: 12px;
-        }
-
-        /* Stats */
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
             padding: 40px 0;
         }
 
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
+        .hero h1 {
             font-size: 48px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            background: linear-gradient(180deg, #1d1d1f 0%, #424245 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
         }
 
-        .stat-label {
-            font-size: 12px;
-            font-weight: 500;
+        .hero p {
+            font-size: 18px;
             color: #86868b;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-top: 4px;
         }
 
-        /* Section */
         .section {
-            padding: 60px 0;
+            background: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
         }
 
         .section-title {
-            font-size: 32px;
+            font-size: 13px;
             font-weight: 600;
-            letter-spacing: -0.01em;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        /* Cards Grid */
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 28px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-        }
-
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .card.selected {
-            border: 2px solid #0071e3;
-            background: linear-gradient(180deg, #f5f5f7 0%, #ffffff 100%);
-        }
-
-        .card-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 22px;
-            font-weight: 500;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 16px;
         }
 
-        .card-name {
-            font-size: 19px;
+        .cards { display: flex; flex-direction: column; gap: 10px; }
+
+        .card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: #f5f5f7;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .card:hover { background: #ebebed; }
+        .card.selected { border-color: #007aff; background: #e8f0fe; }
+
+        .avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5856d6 0%, #af52de 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
             font-weight: 600;
-            letter-spacing: -0.01em;
-            margin-bottom: 4px;
+            flex-shrink: 0;
         }
 
-        .card-roll {
-            font-size: 13px;
-            color: #86868b;
-            font-weight: 500;
-            margin-bottom: 12px;
+        .info { flex: 1; }
+        .name { font-size: 16px; font-weight: 600; }
+        .roll { font-size: 12px; color: #86868b; margin-top: 2px; }
+
+        .radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #c7c7cc;
+            border-radius: 50%;
         }
 
-        .card-desc {
-            font-size: 14px;
-            color: #6e6e73;
-            line-height: 1.5;
+        .card.selected .radio {
+            background: #007aff;
+            border-color: #007aff;
+            position: relative;
         }
 
-        .empty {
-            text-align: center;
-            padding: 60px 20px;
-            color: #86868b;
-            font-size: 17px;
+        .card.selected .radio::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
         }
 
-        /* Vote Button */
         .vote-btn {
-            display: block;
             width: 100%;
-            max-width: 320px;
-            margin: 40px auto;
-            padding: 18px 32px;
-            background: linear-gradient(180deg, #0077ed 0%, #0071e3 100%);
-            color: white;
+            padding: 16px;
+            background: #007aff;
+            color: #fff;
             border: none;
             border-radius: 14px;
             font-size: 17px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
+            margin-top: 20px;
             transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
         }
 
-        .vote-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(0, 113, 227, 0.4);
-        }
+        .vote-btn:disabled { background: #c7c7cc; cursor: not-allowed; }
+        .vote-btn:not(:disabled):hover { background: #0066d6; }
 
-        .vote-btn:disabled {
-            background: #d2d2d7;
-            box-shadow: none;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Results */
-        .results-list {
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .empty { text-align: center; padding: 24px; color: #86868b; font-size: 15px; }
 
         .result-row {
             display: flex;
             align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .result-rank {
-            width: 32px;
-            height: 32px;
+        .result-row:last-child { border: none; }
+
+        .rank {
+            width: 28px;
+            height: 28px;
             background: #f5f5f7;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #86868b;
+            margin-right: 12px;
+        }
+
+        .result-row:first-child .rank { background: #ffd60a; color: #1d1d1f; }
+
+        .result-name { flex: 1; font-size: 15px; font-weight: 500; }
+        .pct { font-size: 15px; font-weight: 600; }
+
+        .voter-list { max-height: 200px; overflow-y: auto; }
+
+        .voter-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
             font-size: 14px;
-            font-weight: 600;
-            margin-right: 16px;
         }
 
-        .result-row:first-child .result-rank {
-            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
-            color: white;
-        }
+        .voter-row:last-child { border: none; }
 
-        .result-info {
-            flex: 1;
-        }
-
-        .result-name {
-            font-size: 17px;
+        .status {
+            font-size: 12px;
             font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 20px;
         }
 
-        .result-bar {
-            width: 120px;
-            height: 6px;
-            background: #f5f5f7;
-            border-radius: 3px;
-            margin-right: 16px;
-            overflow: hidden;
-        }
+        .status.voted { background: #d1fae5; color: #065f46; }
+        .status.pending { background: #fef3c7; color: #92400e; }
 
-        .result-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #0071e3 0%, #40a9ff 100%);
-            border-radius: 3px;
-        }
-
-        .result-pct {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1d1d1f;
-            min-width: 50px;
-            text-align: right;
-        }
-
-        /* Footer */
         footer {
             text-align: center;
-            padding: 40px 0;
+            padding: 32px 0;
             font-size: 12px;
             color: #86868b;
         }
 
-        footer a {
-            color: #0071e3;
-            text-decoration: none;
-        }
+        footer a { color: #007aff; text-decoration: none; }
 
-        /* Modal */
         .modal-bg {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
             align-items: center;
             justify-content: center;
-            z-index: 1000;
+            z-index: 100;
         }
 
         .modal-bg.show { display: flex; }
 
         .modal {
-            background: white;
+            background: #fff;
             border-radius: 20px;
-            padding: 40px;
-            max-width: 340px;
+            padding: 28px;
+            width: 300px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
         }
 
-        .modal h3 {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
+        .modal h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .modal p { font-size: 14px; color: #86868b; margin-bottom: 24px; }
 
-        .modal p {
-            font-size: 15px;
-            color: #6e6e73;
-            margin-bottom: 28px;
-        }
-
-        .modal-btns {
-            display: flex;
-            gap: 12px;
-        }
-
+        .modal-btns { display: flex; gap: 10px; }
         .modal-btns button {
             flex: 1;
             padding: 14px;
             border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-cancel {
-            background: #f5f5f7;
             border: none;
-            color: #1d1d1f;
         }
 
-        .btn-confirm {
-            background: #0071e3;
-            border: none;
-            color: white;
-        }
+        .btn-cancel { background: #f5f5f7; color: #1d1d1f; }
+        .btn-confirm { background: #007aff; color: #fff; }
 
-        @media (max-width: 734px) {
-            .nav-links { display: none; }
-            .hero h1 { font-size: 40px; }
-            .stats { flex-direction: column; gap: 24px; }
-            .stat-value { font-size: 36px; }
+        @media (max-width: 500px) {
+            .hero h1 { font-size: 36px; }
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="container">
+    <div class="page">
+        <header>
             <div class="logo">CR Elections</div>
-            <div class="nav-links">
-                <a href="#candidates">Candidates</a>
-                <a href="#results">Results</a>
+            <button class="btn" id="loginBtn" onclick="login()">Sign In</button>
+        </header>
+
+        <div class="hero">
+            <h1>Vote</h1>
+            <p>SEM 6</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Candidates</div>
+            <div class="cards" id="candidatesGrid">
+                <p class="empty">Loading...</p>
             </div>
-            <button class="login-btn" id="loginBtn" onclick="login()">Sign In</button>
+            <button class="vote-btn" id="voteBtn" onclick="submitVote()" disabled>Select a candidate</button>
         </div>
-    </nav>
 
-    <section class="hero">
-        <div class="container">
-            <p class="hero-eyebrow">EEE-A Batch'28 • NIT Trichy</p>
-            <h1>Class Representative<br>Elections</h1>
-            <p class="hero-sub">Your voice matters. Vote for change.</p>
-        </div>
-    </section>
-
-    <section class="stats">
-        <div class="stat">
-            <div class="stat-value" id="statCandidates">—</div>
-            <div class="stat-label">Candidates</div>
-        </div>
-        <div class="stat">
-            <div class="stat-value" id="statVoters">—</div>
-            <div class="stat-label">Voters</div>
-        </div>
-        <div class="stat">
-            <div class="stat-value" id="statVoted">—</div>
-            <div class="stat-label">Voted</div>
-        </div>
-    </section>
-
-    <section id="candidates" class="section">
-        <div class="container">
-            <h2 class="section-title">Candidates</h2>
-            <div class="cards" id="candidatesGrid"></div>
-            <button class="vote-btn" id="voteBtn" onclick="submitVote()" disabled>Select a Candidate</button>
-        </div>
-    </section>
-
-    <section id="results" class="section">
-        <div class="container">
-            <h2 class="section-title">Results</h2>
-            <div class="results-list" id="resultsList">
-                <p class="empty">Results will be announced after voting ends.</p>
+        <div class="section">
+            <div class="section-title">Results</div>
+            <div id="resultsList">
+                <p class="empty">Pending</p>
             </div>
         </div>
-    </section>
 
-    <footer>
-        Made with ♥ by <a href="https://github.com/JACKURUVI99" target="_blank">Harish Annavisamy</a>
-    </footer>
+        <div class="section">
+            <div class="section-title">Voters</div>
+            <div class="voter-list" id="votersList">
+                <p class="empty">Loading...</p>
+            </div>
+        </div>
+
+        <footer>
+            Made with love by <a href="https://github.com/JACKURUVI99" target="_blank">Harish Annavisamy</a>
+        </footer>
+    </div>
 
     <div class="modal-bg" id="modal">
         <div class="modal">
@@ -480,49 +325,61 @@
 
         fetch(API + '/api/candidates').then(r => r.json()).then(d => {
             candidates = d || [];
-            document.getElementById('statCandidates').textContent = candidates.length || '0';
             const grid = document.getElementById('candidatesGrid');
             if (!candidates.length) {
-                grid.innerHTML = '<p class="empty">No candidates registered yet.</p>';
+                grid.innerHTML = '<p class="empty">No candidates yet</p>';
                 return;
             }
             grid.innerHTML = candidates.map(c => `
                 <div class="card" data-id="${c.id}" onclick="selectCard(${c.id})">
-                    <div class="card-avatar">${c.name.charAt(0)}</div>
-                    <div class="card-name">${c.name}</div>
-                    <div class="card-roll">${c.roll_number}</div>
-                    <div class="card-desc">${c.manifesto || 'No manifesto provided'}</div>
+                    <div class="avatar">${c.name.charAt(0)}</div>
+                    <div class="info">
+                        <div class="name">${c.name}</div>
+                        <div class="roll">${c.roll_number}</div>
+                    </div>
+                    <div class="radio"></div>
                 </div>
             `).join('');
+        }).catch(() => {
+            document.getElementById('candidatesGrid').innerHTML = '<p class="empty">No candidates yet</p>';
         });
 
         fetch(API + '/api/results').then(r => r.json()).then(d => {
-            if (d.stats) {
-                document.getElementById('statVoters').textContent = d.stats.total_voters || '0';
-                document.getElementById('statVoted').textContent = d.stats.total_voted || '0';
-            }
             if (d.candidates?.length) {
                 const total = d.candidates.reduce((s, c) => s + c.vote_count, 0);
                 document.getElementById('resultsList').innerHTML = d.candidates.map((c, i) => {
                     const pct = total ? (c.vote_count / total * 100).toFixed(0) : 0;
-                    return `
-                        <div class="result-row">
-                            <div class="result-rank">${i + 1}</div>
-                            <div class="result-info"><div class="result-name">${c.name}</div></div>
-                            <div class="result-bar"><div class="result-bar-fill" style="width:${pct}%"></div></div>
-                            <div class="result-pct">${pct}%</div>
-                        </div>
-                    `;
+                    return `<div class="result-row">
+                        <div class="rank">${i + 1}</div>
+                        <div class="result-name">${c.name}</div>
+                        <div class="pct">${pct}%</div>
+                    </div>`;
                 }).join('');
             }
         }).catch(() => {});
 
+        fetch(API + '/api/voters').then(r => r.json()).then(d => {
+            const list = document.getElementById('votersList');
+            if (!d?.length) {
+                list.innerHTML = '<p class="empty">No voters yet</p>';
+                return;
+            }
+            list.innerHTML = d.map(v => `
+                <div class="voter-row">
+                    <span>${v.name}</span>
+                    <span class="status ${v.has_voted ? 'voted' : 'pending'}">${v.has_voted ? 'Voted' : 'Pending'}</span>
+                </div>
+            `).join('');
+        }).catch(() => {
+            document.getElementById('votersList').innerHTML = '<p class="empty">No voters yet</p>';
+        });
+
         function selectCard(id) {
             if (!user) { login(); return; }
             if (!user.roll_number?.startsWith('107124') || parseInt(user.roll_number.slice(-1)) % 2 === 0) {
-                alert("Only EEE-A Batch'28 students are allowed to vote"); return;
+                alert("Only EEE-A Batch'28 students can vote"); return;
             }
-            if (user.has_voted) { alert('You have already voted'); return; }
+            if (user.has_voted) { alert('Already voted'); return; }
             selected = candidates.find(c => c.id === id);
             document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
             document.querySelector(`[data-id="${id}"]`).classList.add('selected');
@@ -548,10 +405,10 @@
             if (r.ok) {
                 user.has_voted = true;
                 localStorage.setItem('voter', JSON.stringify(user));
-                alert('Vote submitted successfully!');
+                alert('Vote submitted!');
                 location.reload();
             } else {
-                alert((await r.json()).error || 'Failed to vote');
+                alert((await r.json()).error || 'Failed');
             }
         }
     </script>
