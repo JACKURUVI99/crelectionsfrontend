@@ -21,7 +21,8 @@
             text-align: center; padding: 40px 20px;
         }
         .login-screen h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
-        .login-screen p { color: #86868b; margin-bottom: 32px; }
+        .login-screen p { color: #86868b; margin-bottom: 32px; font-size: 14px; }
+        .error-msg { color: #ff453a; margin-bottom: 20px; font-size: 14px; }
 
         .app { display: none; }
         .app.show { display: block; }
@@ -92,7 +93,7 @@
 
         .empty { text-align: center; padding: 24px; color: #86868b; }
 
-        .vote-info { font-size: 11px; color: #0a84ff; }
+        .vote-info { font-size: 11px; color: #0a84ff; margin-left: 8px; }
 
         .tabs { display: flex; gap: 4px; margin-bottom: 20px; }
         .tab {
@@ -110,7 +111,8 @@
     <div class="login-screen" id="loginScreen">
         <h1>Admin Panel</h1>
         <p>Sign in with your NIT Trichy account</p>
-        <button class="btn" onclick="login()">Sign In</button>
+        <div id="errorMsg" class="error-msg" style="display:none"></div>
+        <button class="btn" onclick="login()">Sign In with DAuth</button>
     </div>
 
     <div class="app" id="app">
@@ -200,39 +202,66 @@
 
     <script>
         const API = 'https://1s0kvr4eke.execute-api.ap-south-1.amazonaws.com';
-        let user = JSON.parse(localStorage.getItem('voter'));
-        let admins = ['107124039'];
+        let user = null;
 
-        checkAuth();
-
-        async function checkAuth() {
-            if (!user) return;
-            
-            // Check if user is admin
-            const r = await fetch(API + '/api/admin/check?roll=' + user.roll_number);
-            const d = await r.json();
-            
-            if (d.is_admin) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('app').classList.add('show');
-                loadAll();
-            } else {
-                alert('Access denied. You are not an admin.');
-                localStorage.clear();
-                location.href = 'index.html';
+        // Check URL for returning from DAuth
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('auth') === 'success') {
+            user = JSON.parse(localStorage.getItem('voter'));
+            if (user) {
+                checkAdmin();
+            }
+        } else {
+            // Check if already logged in as admin
+            user = JSON.parse(localStorage.getItem('voter'));
+            if (user) {
+                checkAdmin();
             }
         }
 
+        async function checkAdmin() {
+            try {
+                const r = await fetch(API + '/api/admin/check?roll=' + user.roll_number);
+                const d = await r.json();
+                
+                if (d.is_admin) {
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('app').classList.add('show');
+                    loadAll();
+                } else {
+                    showError('Access denied. Roll ' + user.roll_number + ' is not an admin.');
+                }
+            } catch (e) {
+                showError('Failed to verify admin status');
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('errorMsg').textContent = msg;
+            document.getElementById('errorMsg').style.display = 'block';
+        }
+
         function login() {
+            // Clear any existing session for fresh admin login
+            localStorage.removeItem('adminToken');
+            
+            const state = 'admin_' + Math.random().toString(36).slice(2);
+            localStorage.setItem('adminState', state);
+            
             location.href = 'https://auth.delta.nitt.edu/authorize?' + new URLSearchParams({
                 client_id: 'sXdN9pQbJXm3JDN-',
-                redirect_uri: 'https://jackuruvi99.github.io/crelectionsfrontend/callback.html?admin=1',
-                response_type: 'code', scope: 'email openid profile user',
-                grant_type: 'authorization_code', state: 'admin_' + Math.random().toString(36).slice(2)
+                redirect_uri: 'https://jackuruvi99.github.io/crelectionsfrontend/callback.html?next=admin',
+                response_type: 'code', 
+                scope: 'email openid profile user',
+                grant_type: 'authorization_code', 
+                state: state
             });
         }
 
-        function logout() { localStorage.clear(); location.reload(); }
+        function logout() { 
+            localStorage.clear(); 
+            location.reload(); 
+        }
 
         function showTab(name) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -366,6 +395,7 @@
                 body: JSON.stringify({ voting_open: open })
             });
             loadSettings();
+            alert(open ? 'Voting is now OPEN' : 'Voting is now CLOSED');
         }
 
         async function setResults(released) {
@@ -375,6 +405,7 @@
                 body: JSON.stringify({ results_released: released })
             });
             loadSettings();
+            alert(released ? 'Results are now PUBLIC' : 'Results are now HIDDEN');
         }
     </script>
 </body>

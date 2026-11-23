@@ -46,12 +46,14 @@
             const code = params.get('code');
             const state = params.get('state');
             const error = params.get('error');
-            const isAdmin = params.get('admin') === '1' || state?.startsWith('admin_');
+            const next = params.get('next');
+            
+            const isAdmin = next === 'admin' || state?.startsWith('admin_');
 
             if (error || !code) {
                 document.getElementById('spinner').style.display = 'none';
                 document.getElementById('status').textContent = 'Failed';
-                document.getElementById('message').innerHTML = `<span class="error">${error || 'No code'}</span><br><a href="index.html" class="btn">Return</a>`;
+                document.getElementById('message').innerHTML = `<span class="error">${error || 'No authorization code'}</span><br><a href="index.html" class="btn">Return</a>`;
                 return;
             }
 
@@ -62,7 +64,7 @@
                     body: JSON.stringify({ code, state })
                 });
                 const data = await r.json();
-                if (!r.ok) throw new Error(data.error || 'Failed');
+                if (!r.ok) throw new Error(data.error || 'Authentication failed');
 
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('voter', JSON.stringify(data.voter));
@@ -71,7 +73,11 @@
                 document.getElementById('message').textContent = 'Redirecting...';
 
                 setTimeout(() => {
-                    window.location.href = isAdmin ? 'admin.html' : 'index.html';
+                    if (isAdmin) {
+                        window.location.href = 'admin.html?auth=success';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
                 }, 1000);
             } catch (err) {
                 document.getElementById('spinner').style.display = 'none';
